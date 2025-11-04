@@ -45,6 +45,30 @@ jobs:
           git commit -m "ci: add/update theengs-decoder submodule"
           git push
         )
+        
+        cd theengs-decoder/src
+        if [ ! -d arduino_json ]; then
+          git submodule add https://github.com/bblanchon/ArduinoJson.git arduino_json
+        fi
+
+        # 2. 初始化 & 拉取子模块
+        git submodule update --init --recursive
+
+        # 3. 进入子模块，检出默认分支（自动检测）
+        cd arduino_json
+        default_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+        echo $default_branch
+        git pull origin "$default_branch"
+        cd ..
+
+        # 4. 记录子模块 commit 并提交
+        git add arduino_json
+        git diff --cached --quiet || (
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "ci: add/update arduino_json submodule"
+          git push
+        )
 
     - name: Verify submodule exist
       run: |
@@ -54,6 +78,13 @@ jobs:
         cat decoder/.git 2>/dev/null || echo "（无 .git 文件，可能是 gitlink）"
         echo "=== 查看子模块提交 ==="
         git -C app/src/main/cpp/theengs-decoder rev-parse HEAD
+        
+        echo "=== 查看 decoder 目录 ==="
+        ls -la app/src/main/cpp/theengs-decoder/src/arduino_json
+        echo "=== 查看 decoder/.git ==="
+        cat decoder/.git 2>/dev/null || echo "（无 .git 文件，可能是 gitlink）"
+        echo "=== 查看子模块提交 ==="
+        git -C app/src/main/cpp/theengs-decoder/src/arduino_json rev-parse HEAD
 
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17

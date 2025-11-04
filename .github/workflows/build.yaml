@@ -15,6 +15,42 @@ jobs:
       with:
         submodules: recursive   # 拉 theengs-decoder
 
+    - name: 初始化并重新添加子模块（纯 CI）
+      run: |
+        # 1. 若 decoder 目录不存在，重新添加子模块
+        cd app/src/main/cpp
+        if [ ! -d theengs-decoder ]; then
+          git submodule add https://github.com/theengs/decoder.git theengs-decoder
+        fi
+
+        # 2. 初始化 & 拉取子模块
+        git submodule update --init --recursive
+
+        # 3. 进入子模块，检出默认分支（自动检测）
+        cd theengs-decoder
+        default_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+        echo $default_branch
+        git pull origin "$default_branch"
+        cd ..
+
+        # 4. 记录子模块 commit 并提交
+        git add decoder
+        git diff --cached --quiet || (
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "ci: add/update decoder submodule"
+          git push
+        )
+
+    - name: Verify submodule exist
+      run: |
+        echo "=== 查看 decoder 目录 ==="
+        ls -la decoder/
+        echo "=== 查看 decoder/.git ==="
+        cat decoder/.git 2>/dev/null || echo "（无 .git 文件，可能是 gitlink）"
+        echo "=== 查看子模块提交 ==="
+        git -C decoder rev-parse HEAD
+
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17
       uses: actions/setup-java@v4

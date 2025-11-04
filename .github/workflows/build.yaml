@@ -1,0 +1,70 @@
+name: Build Release APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:        # 手动触发按钮
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 拉代码
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive   # 拉 theengs-decoder
+
+    # 2. 配置 JDK 17（AGP 8.x 必需）
+    - name: Setup JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    # 3. 缓存 Gradle 依赖 & 构建缓存
+    - name: Cache Gradle
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.gradle/native
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    # 4. 缓存 NDK（避免每次下载 1 GB）
+    - name: Cache NDK
+      uses: actions/cache@v4
+      id: ndk-cache
+      with:
+        path: /usr/local/lib/android/sdk/ndk/25.2.9519653
+        key: ${{ runner.os }}-ndk-25.2.9519653
+
+    # 5. 安装 Android SDK 命令行工具 & NDK
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    - name: Install NDK
+      if: steps.ndk-cache.outputs.cache-hit != 'true'
+      run: sdkmanager --install "ndk;25.2.9519653"
+
+    # 6. 赋予 Gradle 可执行权限
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # 7. 编译 Release APK（含 CMake 交叉编译）
+    - name: Build APK
+      env:
+        ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
+      run: ./gradlew assembleRelease --stacktrace
+
+    # 8. 上传构建产物（unsigned）
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: theengs-bg-unsigned
+        path: app/build/outputs/apk/release/app-release-unsigned.apk

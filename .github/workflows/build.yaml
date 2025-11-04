@@ -1,8 +1,12 @@
 name: Build Release APK
 
 on:
-
   workflow_dispatch:        # 手动触发按钮
+
+# ① 授予写权限（提交 & 推送）
+permissions:
+  contents: write   # 允许写仓库内容
+  pull-requests: write   # 可选：若后续要开 PR
 
 jobs:
   build:

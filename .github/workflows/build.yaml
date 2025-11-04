@@ -53,7 +53,7 @@ jobs:
         echo "=== 查看 decoder/.git ==="
         cat decoder/.git 2>/dev/null || echo "（无 .git 文件，可能是 gitlink）"
         echo "=== 查看子模块提交 ==="
-        git -C theengs-decoder rev-parse HEAD
+        git -C app/src/main/cpp/theengs-decoder rev-parse HEAD
 
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17

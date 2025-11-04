@@ -49,6 +49,20 @@ jobs:
       if: steps.ndk-cache.outputs.cache-hit != 'true'
       run: sdkmanager --install "ndk;25.2.9519653"
 
+    # ③ 2025 官方推荐：自动安装完整 Gradle 8.x 并缓存
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '8.1.1'   # 指定版本，可选
+
+    # ③ 用本地 gradle 生成 wrapper（一次即可）
+    - name: Generate Gradle Wrapper
+      run: gradle wrapper --gradle-version 8.0
+
+    # ④ 后续统一用 gradlew 构建（缓存、签名等不变）
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
     # 6. 赋予 Gradle 可执行权限
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew

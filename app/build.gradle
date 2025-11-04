@@ -38,7 +38,7 @@ android {
     // NDK / CMake 路径
     externalNativeBuild {
         cmake {
-            path file('src/cpp/CMakeLists.txt')
+            path file('src/main/cpp/CMakeLists.txt')
             version '3.22.1'   // 与 Android Studio 自带匹配
         }
     }

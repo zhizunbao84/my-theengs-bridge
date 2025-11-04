@@ -1,0 +1,54 @@
+// 应用级 build.gradle（TheengsBg/app/build.gradle）
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.theengsbg'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.theengsbg"
+        minSdk 23          // Android 6.0+
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        // 仅保留主流 ABI，可再删减
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+
+        // CMake 选项
+        externalNativeBuild {
+            cmake {
+                cppFlags ''
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true              // 启用 R8 混淆，进一步瘦身
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt')
+        }
+    }
+
+    // NDK / CMake 路径
+    externalNativeBuild {
+        cmake {
+            path file('src/cpp/CMakeLists.txt')
+            version '3.22.1'   // 与 Android Studio 自带匹配
+        }
+    }
+
+    // 兼容性
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+// 无第三方依赖，零 UI，最轻量
+dependencies {}

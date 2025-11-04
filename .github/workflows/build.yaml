@@ -34,22 +34,22 @@ jobs:
         cd ..
 
         # 4. 记录子模块 commit 并提交
-        git add decoder
+        git add theengs-decoder
         git diff --cached --quiet || (
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "ci: add/update decoder submodule"
+          git commit -m "ci: add/update theengs-decoder submodule"
           git push
         )
 
     - name: Verify submodule exist
       run: |
         echo "=== 查看 decoder 目录 ==="
-        ls -la decoder/
+        ls -la app/src/main/cpp/theengs-decoder/
         echo "=== 查看 decoder/.git ==="
         cat decoder/.git 2>/dev/null || echo "（无 .git 文件，可能是 gitlink）"
         echo "=== 查看子模块提交 ==="
-        git -C decoder rev-parse HEAD
+        git -C theengs-decoder rev-parse HEAD
 
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17

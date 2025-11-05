@@ -20,18 +20,7 @@ jobs:
         submodules: true   # 拉 theengs-decoder
         fetch-depth: 0 
 
-    # 1. 缓存子模块
-    - name: 缓存子模块
-      uses: actions/cache@v3
-      id: submodule-cache
-      with:
-        path: |
-          .git/modules
-          app/src/main/cpp/decoder
-          app/src/main/cpp/decoder/src/arduino_json
-        key: submodules-${{ runner.os }}-${{ hashFiles('.gitmodules') }}
-        restore-keys: |
-          submodules-${{ runner.os }}-
+
 
     # 1. 递归更新所有子模块
     - name: Checkout

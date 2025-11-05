@@ -27,8 +27,8 @@ jobs:
       with:
         path: |
           .git/modules
-          app/src/main/cpp/theengs-decoder
-          app/src/main/cpp/theengs-decoder/src/arduino_json
+          app/src/main/cpp/decoder
+          app/src/main/cpp/decoder/src/arduino_json
         key: submodules-${{ runner.os }}-${{ hashFiles('.gitmodules') }}
         restore-keys: |
           submodules-${{ runner.os }}-

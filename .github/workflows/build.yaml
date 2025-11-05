@@ -13,6 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Clean & re-fetch submodules
+      run: |
+        git submodule deinit -f .
+        rm -rf .git/modules/*
+        git rm -f --cached theengs-decoder || true
+        rm -rf theengs-decoder
+    
     # 1. 拉代码
     - name: Checkout
       uses: actions/checkout@v4

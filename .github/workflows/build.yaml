@@ -24,6 +24,8 @@ jobs:
     # 2. 验证子模块是否就位
     - name: List submodules
       run: |
+        cat .gitmodules
+        git config --file=.gitmodules --get-regexp path
         git submodule update --init --recursive
         git submodule status
 
@@ -71,10 +73,6 @@ jobs:
     # ③ 用本地 gradle 生成 wrapper（一次即可）
     - name: Generate Gradle Wrapper
       run: gradle wrapper --gradle-version 8.0
-
-    # ④ 后续统一用 gradlew 构建（缓存、签名等不变）
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
 
     # 6. 赋予 Gradle 可执行权限
     - name: Grant execute permission for gradlew

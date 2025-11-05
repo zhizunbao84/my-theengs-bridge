@@ -18,41 +18,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        submodules: true   # 拉 theengs-decoder
+        submodules: recursive   # 拉 theengs-decoder
         fetch-depth: 0 
 
-    # 1. 强制初始化 + 更新子模块（无论缓存是否存在）
-    - name: 初始化并更新子模块
-      run: |
-        git config --global user.name  "github-actions"
-        git config --global user.email "github-actions@github.com"
-        # 1. 初始化
-        git submodule update --init --recursive
-        # 2. 拉到远端最新
-        git submodule update --remote --recursive
-        # 3. 如有指针变化就提交（可选）
-        git add .
-        git diff-index --quiet HEAD || (git commit -m "Update submodules" && git push)
+    # 2. 验证子模块是否就位
+    - name: List submodules
+      run: git submodule status
 
-    # 1. 缓存子模块
-    - name: 缓存子模块
-      uses: actions/cache@v3
-      id: submodule-cache
-      with:
-        path: |
-          .git/modules
-          app/src/main/cpp/decoder
-          app/src/main/cpp/decoder/src/arduino_json
-        key: submodules-${{ runner.os }}-${{ hashFiles('.gitmodules') }}
-        restore-keys: |
-          submodules-${{ runner.os }}-
-
-
-
-    - name: 验证子模块已拉取
-      run: |
-        git submodule status
-        ls -l app/src/main/cpp/decoder      # 改成你真实路径
 
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17

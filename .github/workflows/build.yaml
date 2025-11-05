@@ -48,7 +48,7 @@ jobs:
       run: |
         git submodule status
         git config --file=.gitmodules --list
-        git submodule update --init --recursive
+        git submodule update --init --remote --recursive
 
     - name: 验证子模块已拉取
       run: |

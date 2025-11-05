@@ -1,6 +1,4 @@
 [submodule "theengs-decoder"]
 	path = app/src/main/cpp/theengs-decoder
 	url = https://github.com/theengs/decoder.git
-[submodule "app/src/main/cpp/theengs-decoder"]
-	path = app/src/main/cpp/theengs-decoder
-	url = https://github.com/theengs/decoder.git
+

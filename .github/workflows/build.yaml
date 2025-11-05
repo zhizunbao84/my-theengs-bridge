@@ -23,7 +23,9 @@ jobs:
 
     # 2. 验证子模块是否就位
     - name: List submodules
-      run: git submodule status
+      run: |
+        git submodule update --init --recursive
+        git submodule status
 
 
     # 2. 配置 JDK 17（AGP 8.x 必需）

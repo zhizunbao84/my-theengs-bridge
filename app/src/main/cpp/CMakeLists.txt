@@ -16,9 +16,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #      app/src/cpp/
 #        ├── CMakeLists.txt   （本文件）
 #        ├── native-lib.cpp
-#        └── theengs-decoder/ （git submodule 拉下来的原仓）
+#        └── decoder/ （git submodule 拉下来的原仓）
 # ------------------------------------------------------------------
-add_subdirectory(theengs-decoder)
+add_subdirectory(decoder)
 
 # ------------------------------------------------------------------
 # 3. 编译我们自己的 JNI 封装
@@ -30,7 +30,7 @@ add_library(native-lib SHARED native-lib.cpp)
 #    目标名固定为 theengs-decoder（由子目录 CMake 导出）
 # ------------------------------------------------------------------
 target_link_libraries(native-lib
-        theengs-decoder        # 来自 add_subdirectory
+        decoder        # 来自 add_subdirectory
         log                    # Android 系统 log 库
 )
 
@@ -38,6 +38,6 @@ target_link_libraries(native-lib
 # 5. 让 Android Studio 把头文件路径自动补全出来（可选）
 # ------------------------------------------------------------------
 target_include_directories(native-lib PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/theengs-decoder/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/theengs-decoder/src/arduino_json/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/decoder/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/decoder/src/arduino_json/src
 )

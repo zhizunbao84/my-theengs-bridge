@@ -50,7 +50,7 @@ jobs:
         git config --global user.email "github-actions@github.com"
         git submodule status
         git config --file=.gitmodules --list
-        git submodule update --init --recursive
+        git submodule update --remote --recursive
         git commit -am "Update submodules"
         git push
 

@@ -48,7 +48,7 @@ Java_com_example_theengsbg_TheengsJni_decode(
     JsonObject root = doc.to<JsonObject>();
 
     /* 6. 解码 */
-    int ret = decoder.decodeBLEJson(root, payload.data(), payload.size());
+    int ret = decoder.decodeBLEJson(root);
 
     /* 7. 序列化 JSON 并返回 */
     std::string jsonOut;

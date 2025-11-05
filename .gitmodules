@@ -1,5 +1,4 @@
 [submodule "decoder"]
 	path = app/src/main/cpp/decoder
 	url = https://github.com/theengs/decoder.git
-    branch = development
 

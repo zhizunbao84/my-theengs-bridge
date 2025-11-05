@@ -46,6 +46,8 @@ jobs:
       if:
         steps.submodules-cache.outputs.cache-hit != 'true'
       run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
         git submodule status
         git config --file=.gitmodules --list
         git submodule update --init --recursive

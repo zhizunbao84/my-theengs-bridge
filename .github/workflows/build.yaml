@@ -32,6 +32,8 @@ jobs:
 
     # 1. 递归更新所有子模块
     - name: Checkout
+      if:
+        steps.submodules-cache.outputs.cache-hit != 'true'
       run: |
         git submodule update --init --recursive
 

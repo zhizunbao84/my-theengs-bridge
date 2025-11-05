@@ -39,4 +39,5 @@ target_link_libraries(native-lib
 # ------------------------------------------------------------------
 target_include_directories(native-lib PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/theengs-decoder/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/theengs-decoder/src/arduino_json/src
 )

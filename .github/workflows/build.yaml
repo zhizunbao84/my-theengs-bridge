@@ -39,7 +39,14 @@ jobs:
       if:
         steps.submodules-cache.outputs.cache-hit != 'true'
       run: |
+        git submodule status
+        git config --file=.gitmodules --list
         git submodule update --init --recursive
+
+    - name: 验证子模块已拉取
+      run: |
+        git submodule status
+        ls -l app/src/main/cpp/decoder      # 改成你真实路径
 
     # 2. 配置 JDK 17（AGP 8.x 必需）
     - name: Setup JDK 17

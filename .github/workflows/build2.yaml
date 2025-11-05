@@ -15,8 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: true  # 如果你之前拉取了子模块
+
       
       - name: Remove submodule
         working-directory: ${{ github.workspace }}  # 显式指定目录

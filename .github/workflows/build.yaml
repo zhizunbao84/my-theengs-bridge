@@ -13,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - uses: actions/checkout@v4
+    - name: 看看到底有没有 .gitmodules
+      run: |
+        ls -la .gitmodules || echo "❌ 远程提交里根本没有 .gitmodules"
+        git log --oneline -n 5
+        git show HEAD:.gitmodules || echo "❌ HEAD 提交里也不包含 .gitmodules"
   
     # 1. 拉代码
     - name: Checkout

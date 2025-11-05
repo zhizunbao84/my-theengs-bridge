@@ -14,9 +14,17 @@ jobs:
 
     steps:
 
-    - name: Clean & re-fetch submodules
+    - name: Remove submodule
       run: |
+        #git submodule deinit -f app/src/main/cpp/theengs-decoder
+        #git rm --cached app/src/main/cpp/theengs-decoder
+        #rm -rf .git/modules/app/src/main/cpp/theengs-decoder
         rm -rf app/src/main/cpp/theengs-decoder
+        git add .
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git commit -m "Remove submodule path/to/submodule"
+        git push
     
     # 1. 拉代码
     - name: Checkout

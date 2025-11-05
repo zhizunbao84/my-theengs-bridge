@@ -16,6 +16,7 @@ jobs:
 
     - uses: actions/checkout@v4
     - name: 看看到底有没有 .gitmodules
+      working-directory: ${{ github.workspace }}
       run: |
         ls -la .gitmodules || echo "❌ 远程提交里根本没有 .gitmodules"
         git log --oneline -n 5
@@ -44,6 +45,7 @@ jobs:
 
     # 1. 递归更新所有子模块
     - name: Checkout
+      working-directory: ${{ github.workspace }}
       if:
         steps.submodules-cache.outputs.cache-hit != 'true'
       run: |

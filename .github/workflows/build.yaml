@@ -14,18 +14,11 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v4
-    - name: 看看到底有没有 .gitmodules
-      run: |
-        ls -la .gitmodules || echo "❌ 远程提交里根本没有 .gitmodules"
-        git log --oneline -n 5
-        git show HEAD:.gitmodules || echo "❌ HEAD 提交里也不包含 .gitmodules"
- 
     # 1. 拉代码
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        submodules: false   # 拉 theengs-decoder
+        submodules: true   # 拉 theengs-decoder
         fetch-depth: 0 
 
     # 1. 强制初始化 + 更新子模块（无论缓存是否存在）

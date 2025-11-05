@@ -13,16 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-    - name: Remove submodule
-      run: |
-        rm -rf app/src/main/cpp/theengs-decoder
-        git add .
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git commit -m "Remove submodule path/to/submodule"
-        git push
-    
+  
     # 1. 拉代码
     - name: Checkout
       uses: actions/checkout@v4
@@ -30,7 +21,18 @@ jobs:
         submodules: true   # 拉 theengs-decoder
         fetch-depth: 0 
 
-
+    # 1. 缓存子模块
+    - name: 缓存子模块
+      uses: actions/cache@v3
+      id: submodule-cache
+      with:
+        path: |
+          .git/modules
+          app/src/main/cpp/decoder
+          app/src/main/cpp/decoder/src/arduino_json
+        key: submodules-${{ runner.os }}-${{ hashFiles('.gitmodules') }}
+        restore-keys: |
+          submodules-${{ runner.os }}-
 
     # 1. 递归更新所有子模块
     - name: Checkout

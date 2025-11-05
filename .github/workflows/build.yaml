@@ -16,9 +16,8 @@ jobs:
 
     - name: Clean & re-fetch submodules
       run: |
-        rm -rf .git/modules/*
-        git rm -f --cached theengs-decoder || true
-        rm -rf theengs-decoder
+        git rm -f --cached app/src/main/cpp/theengs-decoder || true
+        rm -rf app/src/main/cpp/theengs-decoder
     
     # 1. 拉代码
     - name: Checkout

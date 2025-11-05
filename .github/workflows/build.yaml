@@ -16,9 +16,6 @@ jobs:
 
     - name: Remove submodule
       run: |
-        #git submodule deinit -f app/src/main/cpp/theengs-decoder
-        #git rm --cached app/src/main/cpp/theengs-decoder
-        #rm -rf .git/modules/app/src/main/cpp/theengs-decoder
         rm -rf app/src/main/cpp/theengs-decoder
         git add .
         git config user.name "github-actions"

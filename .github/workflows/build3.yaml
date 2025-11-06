@@ -1,0 +1,51 @@
+name: 拉取子模块
+
+on:
+  workflow_dispatch:        # 手动触发按钮
+
+# ① 授予写权限（提交 & 推送）
+permissions:
+  contents: write   # 允许写仓库内容
+  pull-requests: write   # 可选：若后续要开 PR
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # 1. 拉代码
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive   # 拉 theengs-decoder
+        fetch-depth: 0
+        clean: true
+
+    - name: 清理旧子模块残留（目录+元数据）
+      run: |
+        # 1. 删除 .git/modules 下所有旧子模块元数据（彻底清除旧配置）
+        rm -rf .git/modules/*    
+        
+        # 3. 同步 .gitmodules 最新配置到本地（关键：让Git识别新路径）
+        git submodule sync --recursive
+
+
+    ########################################################################
+    # 步骤 4：重新拉取新路径子模块（缓存未命中，必然执行）
+    ########################################################################
+    - name: 重新拉取新路径子模块
+      #if: steps.submodule-cache.outputs.cache-hit != 'true'
+      run: |      
+        # 重新初始化并递归拉取新路径子模块（--init 初始化新路径，--recursive 拉嵌套子模块）
+        git submodule update --init --recursive
+
+    ########################################################################
+    # 步骤 5：验证新子模块是否拉取成功（可选，用于调试）
+    ########################################################################
+    - name: 验证新子模块路径
+      run: |
+        echo "当前子模块列表："
+        git submodule  # 输出子模块信息，确认路径是新的
+        echo "新子模块目录是否存在："
+        ls -l app/src/main/cpp/decoder  # 替换为新路径，确认目录存在

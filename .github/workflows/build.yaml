@@ -22,13 +22,16 @@ jobs:
         fetch-depth: 0
         clean: true
 
-    - name: 清理旧子模块残留（目录+元数据）
+    - name: 同步、初始化并拉取子模块
       run: |
-        # 1. 删除 .git/modules 下所有旧子模块元数据（彻底清除旧配置）
-        rm -rf .git/modules/*    
-        
-        # 3. 同步 .gitmodules 最新配置到本地（关键：让Git识别新路径）
+        git submodule add https://github.com/theengs/decoder.git app/src/main/cpp/decoder
+        # 同步配置
+        echo "同步子模块配置..."
         git submodule sync --recursive
+        
+        # 初始化子模块（加载配置）
+        echo "初始化子模块..."
+        git submodule init
 
     ########################################################################
     # 步骤 3：缓存新子模块（密钥自动更新，因为 .gitmodules 已改）
@@ -52,7 +55,7 @@ jobs:
       #if: steps.submodule-cache.outputs.cache-hit != 'true'
       run: |      
         # 重新初始化并递归拉取新路径子模块（--init 初始化新路径，--recursive 拉嵌套子模块）
-        git submodule update --init --recursive
+        git submodule update --init --recursive --force
 
     ########################################################################
     # 步骤 5：验证新子模块是否拉取成功（可选，用于调试）

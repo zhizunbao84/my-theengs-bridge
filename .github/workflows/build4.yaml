@@ -8,6 +8,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:  # 全局环境变量，所有步骤的 Git 命令都会生效
+      GIT_TRACE: 1
+      GIT_CURL_VERBOSE: 1
     steps:
       - name: Checkout 主仓库
         uses: actions/checkout@v4

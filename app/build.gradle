@@ -51,6 +51,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    
+    signingConfigs {
+        release {
+            def keystoreFile = findProperty('MYAPP_RELEASE_STORE_FILE') ?: ""
+            if (keystoreFile) {
+                storeFile file(keystoreFile)
+                storePassword findProperty('MYAPP_RELEASE_STORE_PASSWORD')
+                keyAlias findProperty('MYAPP_RELEASE_KEY_ALIAS')
+                keyPassword findProperty('MYAPP_RELEASE_KEY_PASSWORD')
+            }
+        }
+    }
 }
 
 // 无第三方依赖，零 UI，最轻量

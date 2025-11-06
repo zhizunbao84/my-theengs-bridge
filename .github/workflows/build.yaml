@@ -49,7 +49,7 @@ jobs:
     # 步骤 4：重新拉取新路径子模块（缓存未命中，必然执行）
     ########################################################################
     - name: 重新拉取新路径子模块
-      if: steps.submodule-cache.outputs.cache-hit != 'true'
+      #if: steps.submodule-cache.outputs.cache-hit != 'true'
       run: |      
         # 重新初始化并递归拉取新路径子模块（--init 初始化新路径，--recursive 拉嵌套子模块）
         git submodule update --init --recursive

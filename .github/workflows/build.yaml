@@ -121,7 +121,9 @@ jobs:
     - name: Build APK
       env:
         ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
-      run: ./gradlew clean assembleDebug --stacktrace
+      run: |
+        rm -rf app/.cxx app/build
+        ./gradlew clean assembleDebug --stacktrace
 
     # 8. 上传构建产物（unsigned）
     - name: Upload APK

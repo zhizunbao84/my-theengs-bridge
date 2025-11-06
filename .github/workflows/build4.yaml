@@ -1,0 +1,36 @@
+name: 拉取子模块
+on: workflow_dispatch
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 主仓库
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          clean: true
+
+      - name: 同步子模块配置并初始化
+        run: |
+          # 同步 .gitmodules 到本地配置
+          git submodule sync --recursive
+          # 初始化子模块（加载配置到.git/config）
+          git submodule init
+
+      - name: 拉取子模块（带详细日志）
+        run: |
+          # 公开仓库无需鉴权，私有仓库需添加GITHUB_TOKEN配置
+          git submodule update --init --recursive -v  # -v 显示详细拉取过程
+
+      - name: 验证子模块
+        run: |
+          echo "子模块列表："
+          git submodule
+          echo "子模块目录内容："
+          ls -la app/src/main/cpp/decoder

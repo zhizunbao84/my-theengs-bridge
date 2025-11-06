@@ -27,8 +27,7 @@
         android:allowBackup="false"
         android:icon="@android:drawable/ic_menu_compass"
         android:label="TheengsBg"
-        android:process=":bg"
-        android:debuggable="true">
+        android:process=":bg">
 
         <!-- 纯后台服务，exported="true" 方便 adb 启动 -->
         <service

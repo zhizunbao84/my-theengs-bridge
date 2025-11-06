@@ -21,12 +21,17 @@ jobs:
 
       - name: 同步子模块配置并初始化
         run: |
-          # 同步 .gitmodules 到本地配置
+          # 1. 同步 .gitmodules 到本地 .git/config（递归处理嵌套子模块）
           echo "同步子模块配置..."
           git submodule sync --recursive
-          # 初始化子模块（加载配置到.git/config）
+          
+          # 2. 初始化子模块（加载配置，无 -v 参数）
           echo "初始化子模块..."
-          git submodule init -v
+          git submodule init  # 正确格式：无 -v
+          
+          # 3. 验证初始化结果（可选，查看本地配置）
+          echo "查看子模块配置是否加载成功："
+          git config --get-regexp submodule  # 输出所有子模块配置，确认包含 decoder
 
       - name: 拉取子模块（带详细日志）
         run: |

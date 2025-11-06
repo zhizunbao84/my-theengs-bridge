@@ -28,10 +28,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
         release {
-            minifyEnabled true              // 启用 R8 混淆，进一步瘦身
-            proguardFiles getDefaultProguardFile(
-                    'proguard-android-optimize.txt')
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 

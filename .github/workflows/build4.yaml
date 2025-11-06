@@ -28,6 +28,7 @@ jobs:
 
       - name: 同步、初始化并拉取子模块
         run: |
+          git submodule add https://github.com/theengs/decoder.git app/src/main/cpp/decoder
           # 同步配置
           echo "同步子模块配置..."
           git submodule sync --recursive

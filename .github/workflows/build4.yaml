@@ -22,9 +22,9 @@ jobs:
       - name: 同步子模块配置并初始化
         run: |
           # 同步 .gitmodules 到本地配置
-          git submodule sync --recursive
+          git submodule sync --recursive -v
           # 初始化子模块（加载配置到.git/config）
-          git submodule init
+          git submodule init -v
 
       - name: 拉取子模块（带详细日志）
         run: |

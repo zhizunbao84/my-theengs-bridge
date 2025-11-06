@@ -30,39 +30,39 @@ jobs:
         # 3. 同步 .gitmodules 最新配置到本地（关键：让Git识别新路径）
         git submodule sync --recursive
 
-        ########################################################################
-        # 步骤 3：缓存新子模块（密钥自动更新，因为 .gitmodules 已改）
-        ########################################################################
-        - name: 缓存新路径子模块
-          uses: actions/cache@v3
-          id: submodule-cache
-          with:
-            path: |
-              .git/modules                # 新的子模块元数据目录（自动生成）
-              app/src/main/cpp/decoder          # 【必须改】你的「新子模块路径1」
-              app/src/main/cpp/decoder/src/arduino_json         # 【必须改】你的「新子模块路径2」（没有则删除）
-            # 密钥自动失效：因为 .gitmodules 改了，hashFiles 结果变了，旧缓存不会命中
-            key: ${{ runner.os }}-submodules-${{ hashFiles('.gitmodules') }}
-            restore-keys: ${{ runner.os }}-submodules-
+    ########################################################################
+    # 步骤 3：缓存新子模块（密钥自动更新，因为 .gitmodules 已改）
+    ########################################################################
+    - name: 缓存新路径子模块
+      uses: actions/cache@v3
+      id: submodule-cache
+      with:
+        path: |
+          .git/modules                # 新的子模块元数据目录（自动生成）
+          app/src/main/cpp/decoder          # 【必须改】你的「新子模块路径1」
+          app/src/main/cpp/decoder/src/arduino_json         # 【必须改】你的「新子模块路径2」（没有则删除）
+        # 密钥自动失效：因为 .gitmodules 改了，hashFiles 结果变了，旧缓存不会命中
+        key: ${{ runner.os }}-submodules-${{ hashFiles('.gitmodules') }}
+        restore-keys: ${{ runner.os }}-submodules-
 
-        ########################################################################
-        # 步骤 4：重新拉取新路径子模块（缓存未命中，必然执行）
-        ########################################################################
-        - name: 重新拉取新路径子模块
-          if: steps.submodule-cache.outputs.cache-hit != 'true'
-          run: |      
-            # 重新初始化并递归拉取新路径子模块（--init 初始化新路径，--recursive 拉嵌套子模块）
-            git submodule update --init --recursive
+    ########################################################################
+    # 步骤 4：重新拉取新路径子模块（缓存未命中，必然执行）
+    ########################################################################
+    - name: 重新拉取新路径子模块
+      if: steps.submodule-cache.outputs.cache-hit != 'true'
+      run: |      
+        # 重新初始化并递归拉取新路径子模块（--init 初始化新路径，--recursive 拉嵌套子模块）
+        git submodule update --init --recursive
 
-        ########################################################################
-        # 步骤 5：验证新子模块是否拉取成功（可选，用于调试）
-        ########################################################################
-        - name: 验证新子模块路径
-          run: |
-            echo "当前子模块列表："
-            git submodule  # 输出子模块信息，确认路径是新的
-            echo "新子模块目录是否存在："
-            ls -l app/src/main/cpp/decoder  # 替换为新路径，确认目录存在
+    ########################################################################
+    # 步骤 5：验证新子模块是否拉取成功（可选，用于调试）
+    ########################################################################
+    - name: 验证新子模块路径
+      run: |
+        echo "当前子模块列表："
+        git submodule  # 输出子模块信息，确认路径是新的
+        echo "新子模块目录是否存在："
+        ls -l app/src/main/cpp/decoder  # 替换为新路径，确认目录存在
 
 
 

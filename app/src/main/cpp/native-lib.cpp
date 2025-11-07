@@ -5,6 +5,13 @@
 /* 1. 引入官方头文件 */
 #include "decoder/src/decoder.h"
 
+#include <android/log.h>
+
+#define LOG_TAG "TheengsBg"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+
+
 /* 2. 工具：hex 字符串 → byte 数组 */
 static std::vector<uint8_t> hexStringToBytes(const std::string &hex) {
     std::vector<uint8_t> bytes;
@@ -30,16 +37,23 @@ Java_com_example_theengsbg_TheengsJni_decode(
         return env->NewStringUTF(R"({"error":"null_input"})");
 
     const char *cHex = env->GetStringUTFChars(jHexData, nullptr);
+    LOGD("incoming hex=%s", cHex);
     if (cHex == nullptr)
         return env->NewStringUTF(R"({"error":"oom"})");
 
     std::string hexStr(cHex);
+
+    if (hexStr.length() % 2 != 0) {
+        LOGD("odd length");
+        return env->NewStringUTF(R"({"error":"odd_hex"})");
+    }
+    
     env->ReleaseStringUTFChars(jHexData, cHex);
 
     std::vector<uint8_t> payload = hexStringToBytes(hexStr);
     if (payload.empty())
         return env->NewStringUTF(R"({"error":"bad_hex"})");
-
+    LOGD("payload size=%zu", payload.size()); 
     /* 4. 官方解码器实例 */
     TheengsDecoder decoder;
 

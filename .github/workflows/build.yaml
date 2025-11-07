@@ -117,6 +117,12 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Patch decoder to SHARED
+      run: |
+        cd app/src/main/cpp/decoder
+        # ① 把库名改成 theengs-decoder ② 把 STATIC 改成 SHARED
+        sed -i 's/add_library(decoder/add_library(decoder SHARED/' CMakeLists.txt
+
     # 7. 编译 Release APK（含 CMake 交叉编译）
     - name: Build APK
       env:

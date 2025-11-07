@@ -30,9 +30,7 @@ add_library(native-lib SHARED native-lib.cpp)
 #    目标名固定为 theengs-decoder（由子目录 CMake 导出）
 # ------------------------------------------------------------------
 target_link_libraries(native-lib
-        -Wl,--whole-archive
         decoder        # 来自 add_subdirectory
-        -Wl,--whole-archive
         log                    # Android 系统 log 库
 )
 
